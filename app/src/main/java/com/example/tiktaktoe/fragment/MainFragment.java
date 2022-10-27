@@ -32,5 +32,11 @@ public class MainFragment extends BaseFragment<FragmentMainBinding, CommonVM> {
                 callBack.showFrg(DetailFragment.TAG, null, true);
             }
         });
+        binding.playWithBot.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                callBack.showFrg(PlayWithBotFragment.TAG, null, true);
+            }
+        });
     }
 }

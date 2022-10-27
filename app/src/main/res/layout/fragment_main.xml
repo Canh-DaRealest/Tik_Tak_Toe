@@ -14,11 +14,11 @@
         android:orientation="vertical">
 
 
-      <com.google.android.material.imageview.ShapeableImageView
-          android:layout_width="100dp"
-          android:src="@drawable/ttt_bg"
-          android:layout_gravity="center"
-          android:layout_height="100dp"/>
+        <com.google.android.material.imageview.ShapeableImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ttt_bg" />
 
 
         <LinearLayout
@@ -66,26 +66,54 @@
 
     </LinearLayout>
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/play_bt"
-        android:layout_width="150dp"
-        android:layout_height="60dp"
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal|bottom"
-        android:layout_marginBottom="200dp"
-        android:backgroundTint="@color/white"
-        android:drawableLeft="@drawable/ic_play"
-        android:drawableTint="#E53935"
-        android:elevation="8dp"
-        android:fontFamily="sans-serif"
-        android:gravity="center"
-        android:insetLeft="00dp"
-        android:text="Play"
-        android:textColor="@color/black"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        app:cornerRadius="20dp"
-        app:rippleColor="@color/teal_700"
-        app:strokeWidth="2dp" />
+        android:layout_marginBottom="150dp"
+        android:orientation="vertical">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/play_bt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/white"
+            android:drawableLeft="@drawable/ic_play"
+            android:drawableTint="#E53935"
+            android:elevation="8dp"
+            android:fontFamily="sans-serif"
+            android:gravity="center"
+            android:insetLeft="00dp"
+            android:padding="15dp"
+            android:text="2 Player"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:cornerRadius="20dp"
+            app:rippleColor="@color/teal_700"
+            app:strokeWidth="2dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/play_with_bot"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:backgroundTint="@color/white"
+            android:drawableLeft="@drawable/ic_play"
+            android:drawableTint="#E53935"
+            android:elevation="8dp"
+            android:fontFamily="sans-serif"
+            android:gravity="center"
+            android:insetLeft="00dp"
+            android:padding="15dp"
+            android:text="1 Player"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:cornerRadius="20dp"
+            app:rippleColor="@color/teal_700"
+            app:strokeWidth="2dp" />
+    </LinearLayout>
 
 
 </FrameLayout>

@@ -1,8 +1,5 @@
 package com.example.tiktaktoe.fragment;
 
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Paint;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -274,6 +271,7 @@ public class PlayFragment extends BaseFragment<FragmentPlayBinding, CommonVM> {
         ) {
             ob.setImageDrawable(null);
         }
+        binding.stokeLine.setBackground(null);
         setClickedButtn(true);
         setVisibleMenuBttn(false);
         animation.cancel();
@@ -282,8 +280,9 @@ public class PlayFragment extends BaseFragment<FragmentPlayBinding, CommonVM> {
     private boolean checkWin() {
         boolean response = false;
         for (int i = 0; i < winTypeList.size(); i++) {
-            final int[] winType = winTypeList.get(i);//012
+            final int[] winType = winTypeList.get(i);//012  345 678 ...
             if (cellPos[winType[0]] == playerTurn && cellPos[winType[1]] == playerTurn && cellPos[winType[2]] == playerTurn) {
+                showStrokeLine(winType);
                 startAnimation(cellBttn.get(winType[0]));
                 startAnimation(cellBttn.get(winType[1]));
                 startAnimation(cellBttn.get(winType[2]));
@@ -294,6 +293,29 @@ public class PlayFragment extends BaseFragment<FragmentPlayBinding, CommonVM> {
 
         }
         return response;
+    }
+
+    private void showStrokeLine(int[] winType) {
+
+        if (winType[0] == 0 && winType[1] == 1 && winType[2] == 2) {
+            binding.stokeLine.setBackgroundResource(R.drawable.stroke012);
+        } else if (winType[0] == 3 && winType[1] == 4 && winType[2] == 5) {
+            binding.stokeLine.setBackgroundResource(R.drawable.stroke345);
+        } else if (winType[0] == 6 && winType[1] == 7 && winType[2] == 8) {
+            binding.stokeLine.setBackgroundResource(R.drawable.stroke678);
+        } else if (winType[0] == 0 && winType[1] == 4 && winType[2] == 8) {
+            binding.stokeLine.setBackgroundResource(R.drawable.stroke048);
+        } else if (winType[0] == 2 && winType[1] == 4 && winType[2] == 6) {
+            binding.stokeLine.setBackgroundResource(R.drawable.stroke246);
+        } else if (winType[0] == 0 && winType[1] == 3 && winType[2] == 6) {
+            binding.stokeLine.setBackgroundResource(R.drawable.stroke036);
+        } else if (winType[0] == 1 && winType[1] == 4 && winType[2] == 7) {
+            binding.stokeLine.setBackgroundResource(R.drawable.stroke147);
+        } else if (winType[0] == 2 && winType[1] == 5 && winType[2] == 8) {
+            binding.stokeLine.setBackgroundResource(R.drawable.stroke258);
+        }
+        startAnimation(binding.stokeLine);
+
     }
 
     @Override
