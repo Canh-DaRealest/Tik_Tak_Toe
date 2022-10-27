@@ -1,11 +1,14 @@
 package com.example.tiktaktoe.fragment;
 
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 
 import com.example.tiktaktoe.App;
 import com.example.tiktaktoe.R;
@@ -22,13 +25,14 @@ public class PlayFragment extends BaseFragment<FragmentPlayBinding, CommonVM> {
     private ImageView c1, c2, c3, c4, c5, c6, c7, c8, c9;
 
 
-    private final List<int[]> combinationList = new ArrayList<>();
+    private final List<int[]> winTypeList = new ArrayList<>();
     private final List<ImageView> cellBttn = new ArrayList<>();
-    private int[] boxPos = {0, 0, 0, 0, 0, 0, 0, 0, 0};
+    private int[] cellPos = {0, 0, 0, 0, 0, 0, 0, 0, 0};
     private int totalSelectedBoxes = 0;
     private int playerTurn = 1;
     private int player1Score = 0;
     private int player2Score = 0;
+    private int firstplayer = 1;
     Animation animation = new AlphaAnimation(1.0f, 0.0f);
 
     public static final String TAG = PlayFragment.class.getName();
@@ -145,71 +149,92 @@ public class PlayFragment extends BaseFragment<FragmentPlayBinding, CommonVM> {
         cellBttn.add(c9);
 
 
-        combinationList.add(new int[]{0, 1, 2});
-        combinationList.add(new int[]{3, 4, 5});
-        combinationList.add(new int[]{6, 7, 8});
-        combinationList.add(new int[]{0, 3, 6});
-        combinationList.add(new int[]{1, 4, 7});
-        combinationList.add(new int[]{2, 5, 8});
-        combinationList.add(new int[]{0, 4, 8});
-        combinationList.add(new int[]{2, 4, 6});
+        winTypeList.add(new int[]{0, 1, 2});
+        winTypeList.add(new int[]{3, 4, 5});
+        winTypeList.add(new int[]{6, 7, 8});
+        winTypeList.add(new int[]{0, 3, 6});
+        winTypeList.add(new int[]{1, 4, 7});
+        winTypeList.add(new int[]{2, 5, 8});
+        winTypeList.add(new int[]{0, 4, 8});
+        winTypeList.add(new int[]{2, 4, 6});
     }
 
     private boolean isCellSelected(int cellPos) {
-        return boxPos[cellPos] == 0;
+        return this.cellPos[cellPos] == 0;
 
     }
 
     private void performAction(ImageView imageView, int selectedCellPos) {
 
-        boxPos[selectedCellPos] = playerTurn;
+        cellPos[selectedCellPos] = playerTurn;
+
         if (playerTurn == 1) {
             imageView.setImageResource(R.drawable.x);
 
             if (checkWin()) {
-                binding.turn.setText(binding.player1Name.getText().toString() + " thắng!!!");
-                startAnimation(binding.turn);
-                player1Score++;
-                binding.player1Score.setText(player1Score + "");
-                setClickedButtn(false);
-                showResetBttn();
-            } else if (totalSelectedBoxes == 9) {
-                binding.turn.setText("Hòa!!!");
-                startAnimation(binding.turn);
-                setClickedButtn(false);
-                showResetBttn();
+                handleWin(playerTurn);
             } else {
-                changeTurn(2);
                 totalSelectedBoxes++;
+                changeTurn(2);
+                Log.e(TAG, "performAction_1: " + totalSelectedBoxes);
             }
         } else {
             imageView.setImageResource(R.drawable.o);
             if (checkWin()) {
-                binding.turn.setText(binding.player2Name.getText().toString() + " thắng!!!");
-                startAnimation(binding.turn);
-                setClickedButtn(false);
-                player2Score++;
-                binding.player1Score.setText(player2Score + "");
+                handleWin(playerTurn);
 
-            } else if (totalSelectedBoxes == 9) {
-                binding.turn.setText("Hòa!!!");
-                startAnimation(binding.turn);
-                setClickedButtn(false);
-                showResetBttn();
             } else {
-                changeTurn(1);
                 totalSelectedBoxes++;
+                changeTurn(1);
+                Log.e(TAG, "performAction_2: " + totalSelectedBoxes);
             }
         }
 
     }
 
-    private void showResetBttn() {
-        binding.trBttn.setVisibility(View.VISIBLE);
-        binding.btPlayAgain.setClickable(true);
-        binding.btBack.setClickable(true);
+    private void handleWin(int playerTurn) {
+        if (playerTurn == 1) {
+            binding.turn.setText(binding.player1Name.getText().toString() + " thắng!!!");
+            player1Score++;
+            binding.player1Score.setText(player1Score + "");
+
+        } else {
+            binding.turn.setText(binding.player2Name.getText().toString() + " thắng!!!");
+            player2Score++;
+            binding.player2Score.setText(player2Score + "");
+        }
+        startAnimation(binding.turn);
+        setClickedButtn(false);
+        setVisibleMenuBttn(true);
+    }
+
+    private boolean checkDraw() {
+        if (totalSelectedBoxes == 9) {
+            return true;
+        }
+        return false;
+    }
+
+    private void handleDraw() {
+        binding.turn.setText("Hòa!!!");
+        startAnimation(binding.turn);
+        setClickedButtn(false);
+        setVisibleMenuBttn(true);
+    }
+
+    private void setVisibleMenuBttn(boolean state) {
+        if (state) {
+            binding.trBttn.setVisibility(View.VISIBLE);
+
+        } else {
+            binding.trBttn.setVisibility(View.GONE);
+
+        }
+        binding.btPlayAgain.setClickable(state);
+        binding.btBack.setClickable(state);
 
     }
+
 
     private void setClickedButtn(boolean state) {
         for (ImageView ob : cellBttn
@@ -219,6 +244,12 @@ public class PlayFragment extends BaseFragment<FragmentPlayBinding, CommonVM> {
     }
 
     private void changeTurn(int currentPlayer) {
+
+        if (checkDraw()) {
+            handleDraw();
+            return;
+
+        }
         playerTurn = currentPlayer;
         if (playerTurn == 1) {
             binding.turn.setText("Lượt " + binding.player1Name.getText().toString());
@@ -228,26 +259,34 @@ public class PlayFragment extends BaseFragment<FragmentPlayBinding, CommonVM> {
     }
 
     private void resetGame() {
-        boxPos = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0};
-        playerTurn = 1;
-        totalSelectedBoxes = 1;
+        cellPos = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0};
+
+        if (firstplayer == 1) {
+            firstplayer = 2;
+            binding.turn.setText("Lượt " + binding.player2Name.getText().toString());
+        } else if (firstplayer == 2) {
+            firstplayer = 1;
+            binding.turn.setText("Lượt " + binding.player1Name.getText().toString());
+        }
+        playerTurn = firstplayer;
+        totalSelectedBoxes = 0;
         for (ImageView ob : cellBttn
         ) {
             ob.setImageDrawable(null);
         }
         setClickedButtn(true);
+        setVisibleMenuBttn(false);
         animation.cancel();
     }
 
     private boolean checkWin() {
         boolean response = false;
-        for (int i = 0; i < combinationList.size(); i++) {
-            final int[] combination = combinationList.get(i);//012
-            if (boxPos[combination[0]] == playerTurn && boxPos[combination[1]] == playerTurn && boxPos[combination[2]] == playerTurn) {
-                startAnimation(cellBttn.get(combination[0]));
-                startAnimation(cellBttn.get(combination[1]));
-                startAnimation(cellBttn.get(combination[2]));
-
+        for (int i = 0; i < winTypeList.size(); i++) {
+            final int[] winType = winTypeList.get(i);//012
+            if (cellPos[winType[0]] == playerTurn && cellPos[winType[1]] == playerTurn && cellPos[winType[2]] == playerTurn) {
+                startAnimation(cellBttn.get(winType[0]));
+                startAnimation(cellBttn.get(winType[1]));
+                startAnimation(cellBttn.get(winType[2]));
 
                 response = true;
 
