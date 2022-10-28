@@ -1,7 +1,6 @@
 package com.example.tiktaktoe.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -11,7 +10,6 @@ import com.example.tiktaktoe.callback.ICallBack;
 import com.example.tiktaktoe.R;
 import com.example.tiktaktoe.fragment.BaseFragment;
 import com.example.tiktaktoe.fragment.MainFragment;
-import com.example.tiktaktoe.fragment.PlayFragment;
 
 public class MainActivity extends AppCompatActivity implements ICallBack {
 

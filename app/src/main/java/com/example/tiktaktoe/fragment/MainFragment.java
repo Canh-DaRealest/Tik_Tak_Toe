@@ -4,6 +4,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 
 
+import com.example.tiktaktoe.App;
 import com.example.tiktaktoe.viewmodel.CommonVM;
 import com.example.tiktaktoe.databinding.FragmentMainBinding;
 
@@ -35,8 +36,18 @@ public class MainFragment extends BaseFragment<FragmentMainBinding, CommonVM> {
         binding.playWithBot.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                callBack.showFrg(PlayWithBotFragment.TAG, null, true);
+                App.getInstance().getStorage().playWithBot= true;
+                callBack.showFrg(PlayFrg.TAG, null, true);
             }
         });
+        binding.setting.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+              showSEttingDialog();
+            }
+        });
+    }
+
+    private void showSEttingDialog() {
     }
 }

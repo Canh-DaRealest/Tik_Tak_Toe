@@ -9,5 +9,6 @@ public class Storage {
     public String playerName1, playerName2;
     public List<Name> nameList;
     public String[] playerName;
+    public boolean playWithBot = false;
 
 }

@@ -172,7 +172,7 @@ public class DetailFragment extends BaseFragment<FragmentDetailBinding, CommonVM
                     }
                 }
 
-                callBack.showFrg(PlayFragment.TAG, null, false);
+                callBack.showFrg(PlayFrg.TAG, null, false);
 
             }
         });
