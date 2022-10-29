@@ -1,6 +1,5 @@
 package com.example.tiktaktoe.fragment;
 
-import android.media.MediaPlayer;
 import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,7 +8,6 @@ import android.view.animation.Animation;
 import android.widget.ImageView;
 
 import com.example.tiktaktoe.App;
-import com.example.tiktaktoe.MediaManager;
 import com.example.tiktaktoe.R;
 import com.example.tiktaktoe.activity.MainActivity;
 import com.example.tiktaktoe.databinding.FragmentPlayBinding;
@@ -55,7 +53,12 @@ public class PlayFrg extends BaseFragment<FragmentPlayBinding, CommonVM> {
     }
 
     private void playClickSound() {
-        App.getInstance().getMediaManager().playSound(App.getInstance().getMediaManager().CLICK_SOUND);
+        if (board.getPlayerTurn()==1){
+            App.getInstance().getMediaManager().playSound(App.getInstance().getMediaManager().X_SOUND);
+        }else{
+            App.getInstance().getMediaManager().playSound(App.getInstance().getMediaManager().O_SOUND);
+        }
+
     }
 
     private void playGame() {
@@ -78,15 +81,13 @@ public class PlayFrg extends BaseFragment<FragmentPlayBinding, CommonVM> {
                         new Handler().postDelayed(new Runnable() {
                             @Override
                             public void run() {
-
+                                App.getInstance().getMediaManager().playSound(App.getInstance().getMediaManager().O_SOUND);
                                 performAction(checkViewClick(botLogic.cellPos), botLogic.cellPos);
-                                playClickSound();
                                 setClickedButtn(true);
                             }
                         }, 700);
 
                     }
-
 
                 } else {
                     setClickCell();
@@ -296,7 +297,7 @@ public class PlayFrg extends BaseFragment<FragmentPlayBinding, CommonVM> {
         binding.btBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                playClickSound();
+                App.getInstance().getMediaManager().playSound(App.getInstance().getMediaManager().CLICK_SOUND);
                 MainActivity mainActivity = (MainActivity) mContext;
                 mainActivity.onBackPressed();
 
@@ -305,7 +306,7 @@ public class PlayFrg extends BaseFragment<FragmentPlayBinding, CommonVM> {
         binding.btPlayAgain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                playClickSound();
+                App.getInstance().getMediaManager().playSound(App.getInstance().getMediaManager().CLICK_SOUND);
                 playAgain();
             }
         });
@@ -386,11 +387,23 @@ public class PlayFrg extends BaseFragment<FragmentPlayBinding, CommonVM> {
     private void initPlayer() {
         int image1 = 0, image2 = 0;
         if (App.getInstance().getStorage().chessType.equals("Cổ điển")) {
-            image1 = R.drawable.x;
-            image2 =R.drawable.o;
-        }else if (App.getInstance().getStorage().chessType.equals("Hoạt hình")){
+            image1 = R.drawable.classicx;
+            image2 =R.drawable.classico;
+        }else if (App.getInstance().getStorage().chessType.equals("Hiện đại")){
+            image1 = R.drawable.modern_x;
+            image2 =R.drawable.modern_o;
+        }else if (App.getInstance().getStorage().chessType.equals("Cách điệu")){
             image1 = R.drawable.newx;
             image2 =R.drawable.newo;
+        }else if (App.getInstance().getStorage().chessType.equals("Hoạt hình")){
+            image1 = R.drawable.cartoonx;
+            image2 =R.drawable.cartoono;
+        }else if (App.getInstance().getStorage().chessType.equals("Vũ trụ")){
+            image1 = R.drawable.starx;
+            image2 =R.drawable.moono;
+        }else if (App.getInstance().getStorage().chessType.equals("Tự nhiên")){
+            image1 = R.drawable.naturex;
+            image2 =R.drawable.natureo;
         }
         board = new Board();
         board.updateWintypeList();

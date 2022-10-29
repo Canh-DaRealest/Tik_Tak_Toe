@@ -56,18 +56,23 @@ public class MainActivity extends AppCompatActivity implements ICallBack {
         }
 
     }
+
     private void checkFirstInstall() {
         boolean value = MySharePreference.getInstance().getBooleanValue(MySharePreference.FIRST_INSTALL);
         if (!value) {
-            App.getInstance().getStorage().chessType = "Cổ điển";
+            App.getInstance().getStorage().chessType = "Hiện đại";
 
             App.getInstance().getMediaManager().setSoundState(true);
-
+            MySharePreference.getInstance().putStringValue(MySharePreference.SAVE_CHESS_STATE, App.getInstance().getStorage().chessType);
+            MySharePreference.getInstance().setBooleanValue(MySharePreference.SAVE_SOUND, true);
             MySharePreference.getInstance().setBooleanValue(MySharePreference.FIRST_INSTALL, true);
+
+
         } else {
+
             App.getInstance().getStorage().chessType = MySharePreference.getInstance().getStringValue(MySharePreference.SAVE_CHESS_STATE);
-            if (App.getInstance().getStorage().chessType == null){
-                App.getInstance().getStorage().chessType = "Cổ điển";
+            if (App.getInstance().getStorage().chessType == null) {
+                App.getInstance().getStorage().chessType = "Hiện đại";
 
             }
 
@@ -76,16 +81,17 @@ public class MainActivity extends AppCompatActivity implements ICallBack {
 
         }
     }
+
     @Override
     public void onBackPressed() {
 
-      FragmentManager fragmentManager = getSupportFragmentManager();
-      int count =fragmentManager.getBackStackEntryCount();
-      if (count>0){
-          fragmentManager.popBackStack();
-      }else{
-          finish();
-      }
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        int count = fragmentManager.getBackStackEntryCount();
+        if (count > 0) {
+            fragmentManager.popBackStack();
+        } else {
+            finish();
+        }
 
     }
 }

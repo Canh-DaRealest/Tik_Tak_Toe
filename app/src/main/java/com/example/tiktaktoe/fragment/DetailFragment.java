@@ -41,14 +41,14 @@ public class DetailFragment extends BaseFragment<FragmentDetailBinding, CommonVM
     @Override
     protected void initView() {
         App.getInstance().getStorage().nameList = App.getInstance().getAppDB().getDAO().getName();
-        String[] nameList =  new String[App.getInstance().getStorage().nameList.size()];
-        for (int i = 0; i <  App.getInstance().getStorage().nameList.size(); i++) {
+        String[] nameList = new String[App.getInstance().getStorage().nameList.size()];
+        for (int i = 0; i < App.getInstance().getStorage().nameList.size(); i++) {
 
-            nameList[i] =  App.getInstance().getStorage().nameList.get(i).getName();
+            nameList[i] = App.getInstance().getStorage().nameList.get(i).getName();
         }
 
         if (App.getInstance().getStorage().nameList.size() > 0) {
-            Log.e(TAG, "initView: "+ App.getInstance().getStorage().nameList.size());
+            Log.e(TAG, "initView: " + App.getInstance().getStorage().nameList.size());
             ArrayAdapter<String> adapter = new ArrayAdapter<String>(mContext, android.R.layout.simple_dropdown_item_1line, nameList);
             adapter.notifyDataSetChanged();
 
@@ -79,8 +79,8 @@ public class DetailFragment extends BaseFragment<FragmentDetailBinding, CommonVM
             });
 
 
-        }else{
-            Log.e(TAG, "initView: NULLLLLLLL" );
+        } else {
+            Log.e(TAG, "initView: NULLLLLLLL");
         }
 
 
@@ -155,30 +155,51 @@ public class DetailFragment extends BaseFragment<FragmentDetailBinding, CommonVM
 
                 App.getInstance().getStorage().playerName1 = binding.textInputEdtPlayer1.getText().toString();
                 App.getInstance().getStorage().playerName2 = binding.textInputEdtPlayer2.getText().toString();
-                List<String> item = new ArrayList<>();
 
-                item.add(App.getInstance().getStorage().playerName1);
-                item.add(App.getInstance().getStorage().playerName2);
+                int count = 0;
+                int count2 = 0;
+                if (App.getInstance().getStorage().nameList.size()==0){
 
-                for (String ob : item
-                ) {
-                    for (int i = 0; i < App.getInstance().getStorage().nameList.size(); i++) {
+                    App.getInstance().getAppDB().getDAO().insertAll(new Name(App.getInstance().getStorage().playerName2));
+                    App.getInstance().getAppDB().getDAO().insertAll(new Name(App.getInstance().getStorage().playerName1));
 
-                        if (ob.equals(App.getInstance().getStorage().nameList.get(i).getName())) {
-                            continue;
+                }else{
+                    Log.e(TAG, "onClick: "+App.getInstance().getStorage().nameList.size() );
+                    for (Name ob : App.getInstance().getStorage().nameList
+                    ) {
+                        if (!ob.getName().equals(App.getInstance().getStorage().playerName1)) {
+
+                            count++;
                         }
-                        if (i == App.getInstance().getStorage().nameList.size() - 1) {
-                            App.getInstance().getAppDB().getDAO().insertAll(new Name(ob));
+
+                        if (!ob.getName().equals(App.getInstance().getStorage().playerName2)) {
+                            count2++;
+                        }
+
+
+                        if (count2 >= App.getInstance().getStorage().nameList.size()) {
+                            App.getInstance().getAppDB().getDAO().insertAll(new Name(App.getInstance().getStorage().playerName2));
+                        }
+
+                        if (count >= App.getInstance().getStorage().nameList.size()) {
+                            App.getInstance().getAppDB().getDAO().insertAll(new Name(App.getInstance().getStorage().playerName1));
                         }
                     }
+
                 }
 
+
+
+
+
+                App.getInstance().getStorage().playWithBot = false;
                 callBack.showFrg(PlayFrg.TAG, null, false);
 
             }
         });
 
     }
+
     private void playClickSound() {
         App.getInstance().getMediaManager().playSound(App.getInstance().getMediaManager().CLICK_SOUND);
     }

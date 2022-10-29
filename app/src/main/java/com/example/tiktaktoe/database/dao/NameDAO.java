@@ -18,6 +18,4 @@ public interface NameDAO {
     @Insert
     void insertAll(Name name);
 
-
-
 }

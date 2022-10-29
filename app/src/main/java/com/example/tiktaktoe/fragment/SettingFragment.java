@@ -12,15 +12,27 @@ import com.example.tiktaktoe.App;
 import com.example.tiktaktoe.MySharePreference;
 import com.example.tiktaktoe.R;
 import com.example.tiktaktoe.activity.MainActivity;
+import com.example.tiktaktoe.databinding.DialogChessTypeBinding;
 import com.example.tiktaktoe.databinding.FragmentSettingBinding;
+import com.example.tiktaktoe.dialog.ChessTypeDialog;
 import com.example.tiktaktoe.viewmodel.CommonVM;
 
 public class SettingFragment extends BaseFragment<FragmentSettingBinding, CommonVM> {
-    public static final String TAG = FragmentSettingBinding.class.getName();
+    public static final String TAG = SettingFragment.class.getName();
+
+    @Override
+    protected FragmentSettingBinding initViewBinding(LayoutInflater inflater) {
+        return FragmentSettingBinding.inflate(inflater);
+    }
+
+    @Override
+    protected Class<CommonVM> getClassVM() {
+        return CommonVM.class;
+    }
 
     @Override
     protected void initView() {
-        setUI("ivSound",MySharePreference.getInstance().getBooleanValue(SAVE_SOUND));
+        setUI("ivSound", App.getInstance().getMediaManager().getSoundState());
 
         setClick();
     }
@@ -29,16 +41,7 @@ public class SettingFragment extends BaseFragment<FragmentSettingBinding, Common
     private void setUI(String key, boolean state) {
         if (key.equals("ivSound")) {
 
-            if (state) {
-                binding.btnSound.setChecked(true);
-
-
-            } else {
-                binding.btnSound.setChecked(false);
-
-
-            }
-
+            binding.btnSound.setChecked(state);
         }
     }
 
@@ -46,8 +49,10 @@ public class SettingFragment extends BaseFragment<FragmentSettingBinding, Common
     public void onClick(View view) {
         super.onClick(view);
         if (view.getId() == R.id.btn_sound) {
+            playClickSound();
 
             if (!App.getInstance().getMediaManager().getSoundState()) {
+
                 binding.btnSound.setChecked(true);
                 App.getInstance().getMediaManager().setSoundState(true);
                 MySharePreference.getInstance().setBooleanValue(SAVE_SOUND, App.getInstance().getMediaManager().getSoundState());
@@ -57,52 +62,26 @@ public class SettingFragment extends BaseFragment<FragmentSettingBinding, Common
                 App.getInstance().getMediaManager().setSoundState(false);
                 MySharePreference.getInstance().setBooleanValue(SAVE_SOUND, App.getInstance().getMediaManager().getSoundState());
             }
-
         } else if (view.getId() == R.id.bt_setting_back) {
-
+            playClickSound();
             MainActivity mainActivity = (MainActivity) mContext;
             mainActivity.onBackPressed();
+
         } else if (view.getId() == R.id.chestType) {
+            playClickSound();
             showDialog();
         }
 
     }
 
+    private void playClickSound() {
+        App.getInstance().getMediaManager().playSound(App.getInstance().getMediaManager().CLICK_SOUND);
+
+    }
+
     private void showDialog() {
-        String[] listSize = {"Cổ điển", "Hoạt hình"};
-        String[] value = new String[]{App.getInstance().getStorage().chessType};
-        if (value[0] == null) {
-            value[0] = "Cổ điển";
-        }
-        int index = 0;
-
-        if (value[0].equals("Hoạt hình")) {
-            index = 1;
-        }
-        AlertDialog.Builder alBuilder = new AlertDialog.Builder(getContext());
-
-        alBuilder.setSingleChoiceItems(listSize, index, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                value[0] = listSize[which];
-            }
-        });
-
-        alBuilder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-
-
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                if (value[0].equals("Cổ điển")) {
-                    App.getInstance().getStorage().chessType = "Cổ điển";
-                } else if (value[0].equals("Hoạt hình")) {
-                    App.getInstance().getStorage().chessType = "Hoạt hình";
-                }
-
-                MySharePreference.getInstance().putStringValue(SAVE_CHESS_STATE, App.getInstance().getStorage().chessType);
-            }
-        });
-        alBuilder.show();
+        ChessTypeDialog chessTypeDialog = new ChessTypeDialog(mContext);
+        chessTypeDialog.show();
     }
 
 
@@ -117,17 +96,6 @@ public class SettingFragment extends BaseFragment<FragmentSettingBinding, Common
         binding.btnSound.setOnClickListener(this);
         binding.chestType.setOnClickListener(this);
 
-    }
-
-
-    @Override
-    protected FragmentSettingBinding initViewBinding(LayoutInflater inflater) {
-        return FragmentSettingBinding.inflate(inflater);
-    }
-
-    @Override
-    protected Class<CommonVM> getClassVM() {
-        return CommonVM.class;
     }
 
 

@@ -9,7 +9,7 @@ import java.util.Random;
 public class MediaManager {
     public int X_SOUND = R.raw.xclick;
     public int O_SOUND = R.raw.oclick;
-    public int CLICK_SOUND = R.raw.bttn_click;
+    public int CLICK_SOUND = R.raw.clicksound;
     private boolean isSoundOn = true;
     public MediaPlayer mediaPlayer;
     private MySharePreference sharedPreferences;
@@ -34,7 +34,6 @@ public class MediaManager {
         }
         mediaPlayer = MediaPlayer.create(App.getInstance(), idSound);
 
-        mediaPlayer.setLooping(true);
 
         if (!isSoundOn) {
             mediaPlayer.setVolume(0, 0);
