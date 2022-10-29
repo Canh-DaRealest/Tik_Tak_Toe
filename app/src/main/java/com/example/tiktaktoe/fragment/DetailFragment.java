@@ -132,6 +132,7 @@ public class DetailFragment extends BaseFragment<FragmentDetailBinding, CommonVM
         binding.playBt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                playClickSound();
                 if (binding.textInputEdtPlayer1.getText().toString().isEmpty() && binding.textInputEdtPlayer2.getText().toString().isEmpty()) {
 
                     binding.textInputLayoutPlayer1.setError("Tên không được để trống");
@@ -178,6 +179,8 @@ public class DetailFragment extends BaseFragment<FragmentDetailBinding, CommonVM
         });
 
     }
-
+    private void playClickSound() {
+        App.getInstance().getMediaManager().playSound(App.getInstance().getMediaManager().CLICK_SOUND);
+    }
 
 }

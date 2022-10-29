@@ -1,5 +1,6 @@
 package com.example.tiktaktoe.fragment;
 
+import android.media.MediaPlayer;
 import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +9,7 @@ import android.view.animation.Animation;
 import android.widget.ImageView;
 
 import com.example.tiktaktoe.App;
+import com.example.tiktaktoe.MediaManager;
 import com.example.tiktaktoe.R;
 import com.example.tiktaktoe.activity.MainActivity;
 import com.example.tiktaktoe.databinding.FragmentPlayBinding;
@@ -27,6 +29,7 @@ public class PlayFrg extends BaseFragment<FragmentPlayBinding, CommonVM> {
     private boolean isBotPlay = false;
     Player player1, player2;
     Board board;
+
 
     private final List<ImageView> cellBttn = new ArrayList<>();
     Animation animation = new AlphaAnimation(1.0f, 0.0f);
@@ -51,6 +54,10 @@ public class PlayFrg extends BaseFragment<FragmentPlayBinding, CommonVM> {
 
     }
 
+    private void playClickSound() {
+        App.getInstance().getMediaManager().playSound(App.getInstance().getMediaManager().CLICK_SOUND);
+    }
+
     private void playGame() {
 
         if (board.getPlayerTurn() == 0) {
@@ -71,7 +78,9 @@ public class PlayFrg extends BaseFragment<FragmentPlayBinding, CommonVM> {
                         new Handler().postDelayed(new Runnable() {
                             @Override
                             public void run() {
+
                                 performAction(checkViewClick(botLogic.cellPos), botLogic.cellPos);
+                                playClickSound();
                                 setClickedButtn(true);
                             }
                         }, 700);
@@ -121,48 +130,57 @@ public class PlayFrg extends BaseFragment<FragmentPlayBinding, CommonVM> {
     private void setClickCell() {
         c0.setOnClickListener(view -> {
             if (board.isCellSelected(0)) {
+                playClickSound();
                 performAction((ImageView) view, 0);
             }
         });
 
         c1.setOnClickListener(view -> {
             if (board.isCellSelected(1)) {
+                playClickSound();
                 performAction((ImageView) view, 1);
             }
 
         });
         c2.setOnClickListener(view -> {
             if (board.isCellSelected(2)) {
+                playClickSound();
                 performAction((ImageView) view, 2);
             }
         });
         c3.setOnClickListener(view -> {
             if (board.isCellSelected(3)) {
+                playClickSound();
                 performAction((ImageView) view, 3);
             }
         });
         c4.setOnClickListener(view -> {
             if (board.isCellSelected(4)) {
+                playClickSound();
                 performAction((ImageView) view, 4);
             }
         });
         c5.setOnClickListener(view -> {
             if (board.isCellSelected(5)) {
+                playClickSound();
                 performAction((ImageView) view, 5);
             }
         });
         c6.setOnClickListener(view -> {
             if (board.isCellSelected(6)) {
+                playClickSound();
                 performAction((ImageView) view, 6);
             }
         });
         c7.setOnClickListener(view -> {
             if (board.isCellSelected(7)) {
+                playClickSound();
                 performAction((ImageView) view, 7);
             }
         });
         c8.setOnClickListener(view -> {
             if (board.isCellSelected(8)) {
+                playClickSound();
                 performAction((ImageView) view, 8);
             }
         });
@@ -268,7 +286,8 @@ public class PlayFrg extends BaseFragment<FragmentPlayBinding, CommonVM> {
             binding.btPlayAgain.setVisibility(View.VISIBLE);
             binding.btBack.setVisibility(View.VISIBLE);
 
-        } else { binding.btPlayAgain.setVisibility(View.GONE);
+        } else {
+            binding.btPlayAgain.setVisibility(View.GONE);
             binding.btBack.setVisibility(View.GONE);
 
         }
@@ -277,7 +296,7 @@ public class PlayFrg extends BaseFragment<FragmentPlayBinding, CommonVM> {
         binding.btBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                playClickSound();
                 MainActivity mainActivity = (MainActivity) mContext;
                 mainActivity.onBackPressed();
 
@@ -286,6 +305,7 @@ public class PlayFrg extends BaseFragment<FragmentPlayBinding, CommonVM> {
         binding.btPlayAgain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                playClickSound();
                 playAgain();
             }
         });
@@ -364,6 +384,14 @@ public class PlayFrg extends BaseFragment<FragmentPlayBinding, CommonVM> {
     }
 
     private void initPlayer() {
+        int image1 = 0, image2 = 0;
+        if (App.getInstance().getStorage().chessType.equals("Cổ điển")) {
+            image1 = R.drawable.x;
+            image2 =R.drawable.o;
+        }else if (App.getInstance().getStorage().chessType.equals("Hoạt hình")){
+            image1 = R.drawable.newx;
+            image2 =R.drawable.newo;
+        }
         board = new Board();
         board.updateWintypeList();
 
@@ -372,12 +400,12 @@ public class PlayFrg extends BaseFragment<FragmentPlayBinding, CommonVM> {
 
 
         if (App.getInstance().getStorage().playWithBot) {
-            player1 = new Player("Bạn", R.drawable.x, 0, "x");
-            player2 = new Player("Máy", R.drawable.o, 0, "o");
+            player1 = new Player("Bạn", image1, 0, "x");
+            player2 = new Player("Máy",image2, 0, "o");
             isBotPlay = true;
         } else {
-            player1 = new Player(App.getInstance().getStorage().playerName1, R.drawable.x, 0, "x");
-            player2 = new Player(App.getInstance().getStorage().playerName2, R.drawable.o, 0, "o");
+            player1 = new Player(App.getInstance().getStorage().playerName1,image1, 0, "x");
+            player2 = new Player(App.getInstance().getStorage().playerName2, image2, 0, "o");
         }
 
         binding.player1Name.setText(player1.getPlayerName());

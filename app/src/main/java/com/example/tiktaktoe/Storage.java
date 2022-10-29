@@ -11,4 +11,5 @@ public class Storage {
     public String[] playerName;
     public boolean playWithBot = false;
 
+    public String chessType;
 }

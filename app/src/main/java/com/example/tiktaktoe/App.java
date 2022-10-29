@@ -8,6 +8,7 @@ import com.example.tiktaktoe.database.appdb.AppDB;
 
 public class App extends Application {
     private AppDB appDB;
+    private MediaManager mediaManager;
 
     private static App instance;
     private Storage storage;
@@ -16,11 +17,15 @@ public class App extends Application {
         return storage;
     }
 
+    public MediaManager getMediaManager() {
+        return mediaManager;
+    }
+
     public AppDB getAppDB() {
         return appDB;
     }
 
-    public static  App getInstance() {
+    public static App getInstance() {
         return instance;
     }
 
@@ -28,7 +33,8 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
         instance = this;
-       storage = new Storage();
-       appDB = Room.databaseBuilder(this,AppDB.class,"NameDB").allowMainThreadQueries().build();
+        mediaManager = new MediaManager(this);
+        storage = new Storage();
+        appDB = Room.databaseBuilder(this, AppDB.class, "NameDB").allowMainThreadQueries().build();
     }
 }

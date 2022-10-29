@@ -112,34 +112,26 @@
     </androidx.cardview.widget.CardView>
 
 
-    <androidx.cardview.widget.CardView
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/turn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginVertical="30dp"
-        app:cardBackgroundColor="@color/color_brown_bg"
-        app:cardCornerRadius="5dp"
-        app:cardElevation="11dp"
+        android:elevation="11dp"
+        android:fontFamily="monospace"
+        android:gravity="center"
+        android:maxLines="2"
+        android:padding="5dp"
+        android:text=""
+        android:textColor="#388E3C"
+        android:textSize="35sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@id/cv_board"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tr_score_and_name">
+        app:layout_constraintTop_toBottomOf="@+id/tr_score_and_name"
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/turn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="monospace"
-            android:gravity="center"
-            android:maxLines="2"
-            android:padding="5dp"
-            android:text=""
-            android:textColor="#388E3C"
-            android:textSize="35sp"
-            android:textStyle="bold"
+        />
 
-
-            />
-    </androidx.cardview.widget.CardView>
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cv_board"
@@ -254,6 +246,7 @@
                         android:background="@color/black" />
 
                     <ImageView
+
                         android:id="@+id/c9"
                         style="@style/cellSize"
                         android:contentDescription="@string/todo" />
@@ -290,7 +283,6 @@
 
 
         <com.google.android.material.button.MaterialButton
-            android:visibility="gone"
             android:id="@+id/bt_play_again"
             android:layout_width="100dp"
             android:layout_height="60dp"
@@ -306,6 +298,7 @@
             android:textColor="@color/black"
             android:textSize="16sp"
             android:textStyle="bold"
+            android:visibility="gone"
             app:cornerRadius="15dp"
             app:rippleColor="@color/teal_700"
             app:strokeWidth="2dp" />
@@ -330,7 +323,6 @@
             android:layout_width="100dp"
             android:layout_height="60dp"
             android:layout_gravity="center_horizontal|bottom"
-            android:visibility="gone"
             android:backgroundTint="@color/white"
             android:drawableTint="#E53935"
             android:elevation="7dp"
@@ -342,6 +334,7 @@
             android:textColor="@color/black"
             android:textSize="16sp"
             android:textStyle="bold"
+            android:visibility="gone"
             app:cornerRadius="15dp"
             app:rippleColor="@color/teal_700"
             app:strokeWidth="2dp" />

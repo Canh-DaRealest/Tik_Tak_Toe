@@ -6,6 +6,8 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
 
+import com.example.tiktaktoe.App;
+import com.example.tiktaktoe.MySharePreference;
 import com.example.tiktaktoe.callback.ICallBack;
 import com.example.tiktaktoe.R;
 import com.example.tiktaktoe.fragment.BaseFragment;
@@ -22,6 +24,7 @@ public class MainActivity extends AppCompatActivity implements ICallBack {
     }
 
     private void initViews() {
+        checkFirstInstall();
         showFrg(MainFragment.TAG, null, false);
     }
 
@@ -53,7 +56,26 @@ public class MainActivity extends AppCompatActivity implements ICallBack {
         }
 
     }
+    private void checkFirstInstall() {
+        boolean value = MySharePreference.getInstance().getBooleanValue(MySharePreference.FIRST_INSTALL);
+        if (!value) {
+            App.getInstance().getStorage().chessType = "Cổ điển";
 
+            App.getInstance().getMediaManager().setSoundState(true);
+
+            MySharePreference.getInstance().setBooleanValue(MySharePreference.FIRST_INSTALL, true);
+        } else {
+            App.getInstance().getStorage().chessType = MySharePreference.getInstance().getStringValue(MySharePreference.SAVE_CHESS_STATE);
+            if (App.getInstance().getStorage().chessType == null){
+                App.getInstance().getStorage().chessType = "Cổ điển";
+
+            }
+
+            App.getInstance().getMediaManager().setSoundState(MySharePreference.getInstance().getBooleanValue(MySharePreference.SAVE_SOUND));
+
+
+        }
+    }
     @Override
     public void onBackPressed() {
 
