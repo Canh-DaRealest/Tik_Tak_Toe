@@ -6,7 +6,7 @@ import androidx.room.RoomDatabase;
 import com.example.tiktaktoe.database.dao.NameDAO;
 import com.example.tiktaktoe.database.entities.Name;
 
-@Database(entities = {Name.class}, version = 2)
+@Database(entities = {Name.class}, version = 1)
 public abstract class AppDB extends RoomDatabase {
 
     public abstract NameDAO getDAO();
