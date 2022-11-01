@@ -38,6 +38,7 @@ public class PlayFrg extends BaseFragment<FragmentPlayBinding, MainVM> {
     protected void initView() {
 
         viewModel.initPlayer();
+        viewModel.randomFirtPlayer();
 
         binding.player1Name.setText(viewModel.getPlayer1().getPlayerName());
         binding.player2Name.setText(viewModel.getPlayer2().getPlayerName());
@@ -45,11 +46,15 @@ public class PlayFrg extends BaseFragment<FragmentPlayBinding, MainVM> {
         updateScore();
 
         updateTurn();
-
         initBoardCell();
+        viewModel.updateLiveText(viewModel.getPlayerTurn() == 1 ? viewModel.getPlayer1().getPlayerName() + " đi trước" : viewModel.getPlayer2().getPlayerName() + " đi trước");
 
-        playGame();
-
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                playGame();
+            }
+        },1000);
 
     }
 
@@ -75,13 +80,16 @@ public class PlayFrg extends BaseFragment<FragmentPlayBinding, MainVM> {
         //check who's turn
         //if  is not first game
         //if player1's turn
+
+
+
         if (viewModel.getPlayerTurn() == 1) {
-            viewModel.updateLiveText(new StringBuilder().append("Lượt ").append(viewModel.getPlayer1().getPlayerName()).toString());
+            viewModel.updateLiveText("Lượt " + viewModel.getPlayer1().getPlayerName());
             setClickCell();
 
             //if player2's turn
         } else if (viewModel.getPlayerTurn() == 2) {
-            viewModel.updateLiveText(new StringBuilder().append("Lượt ").append(viewModel.getPlayer2().getPlayerName()).toString());
+            viewModel.updateLiveText("Lượt " + viewModel.getPlayer2().getPlayerName());
 
             if (viewModel.isBotPlay()) {
                 setClickedButtn(false);
@@ -287,11 +295,11 @@ public class PlayFrg extends BaseFragment<FragmentPlayBinding, MainVM> {
     private void handleWin(int playerTurn) {
         showStrokeLine(viewModel.getWinType());
         if (playerTurn == 1) {
-            viewModel.updatePlayerScore(viewModel.getPlayer1().getScore(), viewModel.getPlayer1LiveScore());
+            viewModel.updatePlayerScore(viewModel.getPlayer1());
             viewModel.updateLiveText(viewModel.getPlayer1().getPlayerName() + " thắng");
 
         } else {
-            viewModel.updatePlayerScore(viewModel.getPlayer2().getScore(), viewModel.getPlayer2LiveScore());
+            viewModel.updatePlayerScore(viewModel.getPlayer2());
             viewModel.updateLiveText(viewModel.getPlayer2().getPlayerName() + " thắng");
         }
         startAnimation(binding.turn);
@@ -301,7 +309,7 @@ public class PlayFrg extends BaseFragment<FragmentPlayBinding, MainVM> {
 
 
     private void handleDraw() {
-      viewModel.updateLiveText("Hòa!!!!");
+        viewModel.updateLiveText("Hòa!!!!");
         startAnimation(binding.turn);
         setClickedButtn(false);
         setVisibleMenuBttn(true);
@@ -362,7 +370,17 @@ public class PlayFrg extends BaseFragment<FragmentPlayBinding, MainVM> {
         setClickedButtn(true);
         setVisibleMenuBttn(false);
         animation.cancel();
-        playGame();
+
+        viewModel.updateLiveText(viewModel.getPlayerTurn() == 1 ? viewModel.getPlayer1().getPlayerName() + " đi trước" : viewModel.getPlayer2().getPlayerName() + " đi trước");
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                playGame();
+            }
+        },1000);
+
+
     }
 
 

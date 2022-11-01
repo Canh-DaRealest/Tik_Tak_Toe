@@ -10,15 +10,17 @@ import com.example.tiktaktoe.model.Player;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class MainVM extends ViewModel {
 
     private DifficultBot botLogic;
     private boolean isBotPlay = false;
     Player player1, player2;
+    private int firstPlayer = 1;
 
-    private MutableLiveData<Integer> player1LiveScore = new MutableLiveData<>();
-    private MutableLiveData<Integer> player2LiveScore = new MutableLiveData<>();
+    private final MutableLiveData<Integer> player1LiveScore = new MutableLiveData<>();
+    private final MutableLiveData<Integer> player2LiveScore = new MutableLiveData<>();
     private MutableLiveData<String> turnLiveTxt = new MutableLiveData<>();
 
 
@@ -130,6 +132,11 @@ public class MainVM extends ViewModel {
         }
 
     }
+    public void randomFirtPlayer(){
+
+     playerTurn = new Random().nextInt(2)+1;
+
+    }
 
     public boolean isCellSelected(int cellPos) {
         return this.cellPosArray[cellPos] == 0;
@@ -178,22 +185,33 @@ public class MainVM extends ViewModel {
         cellPosArray = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0};
 
 
-        if (playerTurn == 1) {
-            playerTurn = 2;
+        if (firstPlayer == 1) {
+            firstPlayer = 2;
+            playerTurn =2;
             botLogic.setGoFirst(true);
 
-        } else {
-            botLogic.setGoFirst(false);
-            playerTurn = 1;
+        } else if(firstPlayer == 2){
 
+            firstPlayer = 1;
+            playerTurn = 1;
+            botLogic.setGoFirst(false);
         }
         totalSelectedBoxes = 0;
 
     }
 
 
-    public void updatePlayerScore(int score, MutableLiveData<Integer> playerLiveScore) {
-        playerLiveScore.postValue(score + 1);
+    public void updatePlayerScore(Player player) {
+
+        if (player ==player1){
+            player1.setScore(player1.getScore()+1);
+            player1LiveScore.postValue(player1.getScore());
+        }
+
+     else if (player ==player2){
+            player2.setScore(player2.getScore()+1);
+            player2LiveScore.postValue(player2.getScore());
+        }
 
     }
 }

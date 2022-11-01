@@ -1,0 +1,324 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp"
+    android:layout_gravity="center"
+    android:orientation="horizontal"
+    app:cardBackgroundColor="@color/color_brown_bg"
+    app:cardCornerRadius="10dp"
+    app:cardElevation="11dp">
+
+    <LinearLayout
+        android:id="@+id/ln_add_item"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/color_brown_bg"
+        android:orientation="vertical"
+        android:padding="15dp">
+
+        <TableRow
+            android:id="@+id/tr_classic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@color/color_brown_bg"
+            android:gravity="center_vertical"
+            android:padding="5dp">
+
+            <ImageView
+                android:id="@+id/checkbox_classic"
+                android:layout_width="30dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:buttonTint="@color/black" />
+
+
+            <TextView
+                android:id="@+id/chess_classic"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="15dp"
+                android:fontFamily="monospace"
+                android:text="Cổ điển"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/xStyle_classic"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginHorizontal="10dp"
+                android:padding="5dp"
+                android:src="@drawable/classicx" />
+
+            <ImageView
+                android:id="@+id/oStyle_classic"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginHorizontal="5dp"
+                android:padding="5dp"
+                android:src="@drawable/classico" />
+        </TableRow>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginHorizontal="10dp"
+            android:background="@color/black" />
+
+        <TableRow
+            android:id="@+id/tr_modern"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@color/color_brown_bg"
+            android:gravity="center_vertical"
+            android:padding="5dp">
+
+            <ImageView
+                android:id="@+id/checkbox_modern"
+                android:layout_width="30dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+            />
+
+
+            <TextView
+                android:id="@+id/chessType_modern"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="15dp"
+                android:fontFamily="monospace"
+                android:text="Hiện đại"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/xStyle_modern"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginHorizontal="10dp"
+                android:padding="5dp"
+                android:src="@drawable/modern_o" />
+
+            <ImageView
+                android:id="@+id/oStyle_modern"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginHorizontal="5dp"
+                android:padding="5dp"
+                android:src="@drawable/modern_x" />
+        </TableRow>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginHorizontal="10dp"
+            android:background="@color/black" />
+
+        <TableRow
+            android:id="@+id/tr_stylize"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@color/color_brown_bg"
+            android:gravity="center_vertical"
+            android:padding="5dp">
+
+            <ImageView
+                android:id="@+id/checkbox_stylize"
+                android:layout_width="30dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                />
+
+
+            <TextView
+                android:id="@+id/chessTypeName_stylize"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="15dp"
+                android:fontFamily="monospace"
+                android:text="Cách điệu"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/xStyle_stylize"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginHorizontal="10dp"
+                android:padding="5dp"
+                android:src="@drawable/newx" />
+
+            <ImageView
+                android:id="@+id/oStyle_stylize"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginHorizontal="5dp"
+                android:padding="5dp"
+                android:src="@drawable/newo" />
+        </TableRow>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginHorizontal="10dp"
+            android:background="@color/black" />
+
+        <TableRow
+            android:id="@+id/tr_view_cartoon"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@color/color_brown_bg"
+            android:gravity="center_vertical"
+            android:padding="5dp">
+
+            <ImageView
+                android:id="@+id/checkbox_cartoon"
+                android:layout_width="30dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:buttonTint="@color/black" />
+
+
+            <TextView
+                android:id="@+id/chessTypeName_cartoon"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="15dp"
+                android:fontFamily="monospace"
+                android:text="Hoạt hình"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/xStyle_cartoon"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginHorizontal="10dp"
+                android:padding="5dp"
+                android:src="@drawable/cartoonx" />
+
+            <ImageView
+                android:id="@+id/oStyle_cartoon"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginHorizontal="5dp"
+                android:padding="5dp"
+                android:src="@drawable/cartoono" />
+        </TableRow>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginHorizontal="10dp"
+            android:background="@color/black" />
+
+        <TableRow
+            android:id="@+id/tr_space"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@color/color_brown_bg"
+            android:gravity="center_vertical"
+            android:padding="5dp">
+
+            <ImageView
+                android:id="@+id/checkbox_space"
+                android:layout_width="30dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:buttonTint="@color/black" />
+
+
+            <TextView
+                android:id="@+id/chessTypeName_space"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="15dp"
+                android:fontFamily="monospace"
+                android:text="Vũ trụ"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/xStyle_space"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginHorizontal="10dp"
+                android:padding="5dp"
+                android:src="@drawable/starx" />
+
+            <ImageView
+                android:id="@+id/oStyle_space"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginHorizontal="5dp"
+                android:padding="5dp"
+                android:src="@drawable/moono" />
+        </TableRow>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginHorizontal="10dp"
+            android:background="@color/black" />
+
+        <TableRow
+            android:id="@+id/tr_nature"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@color/color_brown_bg"
+            android:gravity="center_vertical"
+            android:padding="5dp">
+
+            <ImageView
+                android:id="@+id/checkbox_nature"
+                android:layout_width="30dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:buttonTint="@color/black" />
+
+
+            <TextView
+                android:id="@+id/chessTypeName_nature"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="15dp"
+                android:fontFamily="monospace"
+                android:text="Tự nhiên"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/xStyle_nature"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginHorizontal="10dp"
+                android:padding="5dp"
+                android:src="@drawable/naturex" />
+
+            <ImageView
+                android:id="@+id/oStyle_nature"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginHorizontal="5dp"
+                android:padding="5dp"
+                android:src="@drawable/natureo" />
+        </TableRow>
+
+
+    </LinearLayout>
+
+
+</androidx.cardview.widget.CardView>

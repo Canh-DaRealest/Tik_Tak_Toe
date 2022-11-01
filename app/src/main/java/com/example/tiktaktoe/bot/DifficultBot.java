@@ -3,7 +3,10 @@ package com.example.tiktaktoe.bot;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 public class DifficultBot {
 
@@ -12,12 +15,9 @@ public class DifficultBot {
     private int[] cellPositionArr = {0, 0, 0, 0, 0, 0, 0, 0, 0};
     private boolean isGoFirst;
     public int cellPos;
-    private List<int[]> winTypeList = new ArrayList<>();
+    private final List<int[]> winTypeList = new ArrayList<>();
     public int totalSelectedBoxes = 0;
 
-    public boolean isGoFirst() {
-        return isGoFirst;
-    }
 
     public void setGoFirst(boolean goFirst) {
         isGoFirst = goFirst;
@@ -40,8 +40,22 @@ public class DifficultBot {
 
         if (isGoFirst) {
 
-            cellPos = 4;
+            cellPos = new Random().nextInt(9);
             setGoFirst(false);
+            return;
+        }
+        if (checkSecondTurn()) {
+            List<Integer> newList = new ArrayList<>();
+            for (int i = 0; i < cellPositionArr.length; i++
+            ) {
+                if (cellPositionArr[i] == 0) {
+                    newList.add(i);
+                }
+            }
+
+            Collections.shuffle(newList);
+
+            cellPos = newList.get(0);
             return;
         }
         int bestMove = 0;
@@ -50,7 +64,7 @@ public class DifficultBot {
 
             if (cellPositionArr[i] == 0) {
                 cellPositionArr[i] = 2;
-                Log.e("ddddddd", "findBestMove: "+ i );
+                Log.e("ddddddd", "findBestMove: " + i);
 
                 int score = minimax(cellPositionArr, 0, false);
 
@@ -63,8 +77,18 @@ public class DifficultBot {
 
         }
         cellPos = bestMove;
-        Log.e("ddddddd", "\nbestmove: "+ bestMove );
+        Log.e("ddddddd", "\nbestmove: " + bestMove);
 
+    }
+
+    private boolean checkSecondTurn() {
+        int count = 0;
+        for (int j : cellPositionArr) {
+            if (j != 0) {
+                count++;
+            }
+        }
+        return count == 1;
     }
 
 
@@ -120,8 +144,8 @@ public class DifficultBot {
 
     private boolean checkDraw(int[] arr) {
         int count = 0;
-        for (int i = 0; i < arr.length; i++) {
-            if (arr[i] != 0) {
+        for (int j : arr) {
+            if (j != 0) {
                 count++;
             }
         }

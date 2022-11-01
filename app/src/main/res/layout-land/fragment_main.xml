@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:background="@color/color_brown_bg"
+    tools:context=".fragment.MainFragment">
+
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/ln_bg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+
+        app:cardBackgroundColor="@color/color_brown_bg"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="11dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.1">
+
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_gravity="center"
+            android:padding="10dp"
+            android:src="@drawable/ttt_bg" />
+
+
+    </androidx.cardview.widget.CardView>
+
+
+    <View
+        android:id="@+id/animae_rope"
+        android:layout_width="2dp"
+        android:layout_height="55dp"
+        android:background="@color/black"
+        app:layout_constraintEnd_toEndOf="@id/ln_bg"
+        app:layout_constraintStart_toStartOf="@id/ln_bg"
+        app:layout_constraintTop_toBottomOf="@id/ln_bg" />
+
+    <androidx.cardview.widget.CardView
+
+        android:id="@+id/bg_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:cardBackgroundColor="@color/color_brown_bg"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="9dp"
+        app:layout_constraintEnd_toEndOf="@id/animae_rope"
+        app:layout_constraintStart_toStartOf="@id/animae_rope"
+        app:layout_constraintTop_toBottomOf="@id/animae_rope">
+
+
+        <LinearLayout
+            android:id="@+id/ln_animation_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:padding="5dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:elevation="5dp"
+                android:fontFamily="serif-monospace"
+                android:gravity="center"
+                android:text="Tik"
+
+                android:textColor="@color/black"
+                android:textSize="40sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:elevation="5dp"
+                android:fontFamily="serif-monospace"
+                android:gravity="center"
+                android:text="Tak"
+                android:textColor="@color/black"
+                android:textSize="30sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:elevation="5dp"
+                android:fontFamily="serif-monospace"
+                android:gravity="center"
+                android:text="Toe"
+                android:textColor="@color/black"
+                android:textSize="40sp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cv_playbt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:cardBackgroundColor="@color/color_brown_bg"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="11dp"
+        app:layout_constraintBottom_toTopOf="@id/cv_play_with_bot"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.8"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/play_bt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/white"
+            android:drawableLeft="@drawable/twoplayer"
+            android:drawableTint="#E53935"
+            android:fontFamily="sans-serif"
+            android:gravity="center"
+            android:insetLeft="00dp"
+            android:paddingHorizontal="15dp"
+            android:paddingVertical="10dp"
+            android:text="2 Player"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:cornerRadius="20dp"
+            app:rippleColor="@color/teal_700"
+            app:strokeWidth="2dp" />
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cv_play_with_bot"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+        app:cardBackgroundColor="@color/color_brown_bg"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="11dp"
+        app:layout_constraintBottom_toTopOf="@id/tr_appset"
+        app:layout_constraintEnd_toEndOf="@id/cv_playbt"
+        app:layout_constraintStart_toStartOf="@id/cv_playbt"
+        app:layout_constraintTop_toBottomOf="@id/cv_playbt">
+
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/play_with_bot"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/white"
+            android:drawableLeft="@drawable/oneplayer"
+            android:drawableTint="#E53935"
+            android:fontFamily="sans-serif"
+            android:gravity="center"
+            android:insetLeft="00dp"
+            android:paddingHorizontal="15dp"
+            android:paddingVertical="10dp"
+            android:text="1 Player"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:cornerRadius="20dp"
+            app:rippleColor="@color/teal_700"
+            app:strokeWidth="2dp" />
+    </androidx.cardview.widget.CardView>
+
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/tr_appset"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:cardBackgroundColor="@color/color_brown_bg"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="11dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/cv_play_with_bot"
+        app:layout_constraintStart_toStartOf="@id/cv_play_with_bot"
+        app:layout_constraintTop_toBottomOf="@id/cv_play_with_bot">
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingHorizontal="10dp">
+
+            <ImageView
+                android:id="@+id/setting"
+                android:layout_width="35dp"
+                android:layout_height="wrap_content"
+
+                android:src="@drawable/setting" />
+
+            <ImageView
+                android:id="@+id/info"
+                android:layout_width="35dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="35dp"
+                android:src="@drawable/info" />
+
+            <ImageView
+                android:id="@+id/share"
+                android:layout_width="35dp"
+                android:layout_height="wrap_content"
+                android:src="@drawable/share" />
+        </TableRow>
+    </androidx.cardview.widget.CardView>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
