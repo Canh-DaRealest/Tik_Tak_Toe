@@ -1,6 +1,7 @@
 # Tik_Tak_Toe
--An android tik tak toe game made by Java\n
--Using minimax algorithm
+An android tik tak toe game made by Java
+
+Using minimax algorithm
 
 
 
