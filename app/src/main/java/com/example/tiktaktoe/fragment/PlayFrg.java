@@ -7,31 +7,26 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.widget.ImageView;
 
+import androidx.lifecycle.Observer;
+
 import com.example.tiktaktoe.App;
 import com.example.tiktaktoe.R;
 import com.example.tiktaktoe.activity.MainActivity;
 import com.example.tiktaktoe.databinding.FragmentPlayBinding;
-import com.example.tiktaktoe.model.Board;
-import com.example.tiktaktoe.model.BotLogic;
-import com.example.tiktaktoe.model.Player;
-import com.example.tiktaktoe.viewmodel.CommonVM;
+import com.example.tiktaktoe.viewmodel.MainVM;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class PlayFrg extends BaseFragment<FragmentPlayBinding, CommonVM> {
+public class PlayFrg extends BaseFragment<FragmentPlayBinding, MainVM> {
 
     private ImageView c0, c1, c2, c3, c4, c5, c6, c7, c8;
-    private BotLogic botLogic;
-    private boolean isBotPlay = false;
-    Player player1, player2;
-    Board board;
-
 
     private final List<ImageView> cellBttn = new ArrayList<>();
     Animation animation = new AlphaAnimation(1.0f, 0.0f);
     public static final String TAG = PlayFrg.class.getName();
+
 
     @Override
     protected FragmentPlayBinding initViewBinding(LayoutInflater inflater) {
@@ -42,8 +37,14 @@ public class PlayFrg extends BaseFragment<FragmentPlayBinding, CommonVM> {
     @Override
     protected void initView() {
 
+        viewModel.initPlayer();
 
-        initPlayer();
+        binding.player1Name.setText(viewModel.getPlayer1().getPlayerName());
+        binding.player2Name.setText(viewModel.getPlayer2().getPlayerName());
+
+        updateScore();
+
+        updateTurn();
 
         initBoardCell();
 
@@ -52,51 +53,58 @@ public class PlayFrg extends BaseFragment<FragmentPlayBinding, CommonVM> {
 
     }
 
+    private void updateTurn() {
+        viewModel.getTurnLiveTxt().observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+                binding.turn.setText(s);
+            }
+        });
+    }
+
     private void playClickSound() {
-        if (board.getPlayerTurn()==1){
+        if (viewModel.getPlayerTurn() == 1) {
             App.getInstance().getMediaManager().playSound(App.getInstance().getMediaManager().X_SOUND);
-        }else{
+        } else {
             App.getInstance().getMediaManager().playSound(App.getInstance().getMediaManager().O_SOUND);
         }
 
     }
 
     private void playGame() {
-
-        if (board.getPlayerTurn() == 0) {
-            board.setPlayerTurn(1);
-            binding.turn.setText(new StringBuilder().append("Lượt ").append(player1.getPlayerName()).toString());
+        //check who's turn
+        //if  is not first game
+        //if player1's turn
+        if (viewModel.getPlayerTurn() == 1) {
+            viewModel.updateLiveText(new StringBuilder().append("Lượt ").append(viewModel.getPlayer1().getPlayerName()).toString());
             setClickCell();
-        } else {
-            if (board.getPlayerTurn() == 1) {
-                binding.turn.setText(new StringBuilder().append("Lượt ").append(player1.getPlayerName()).toString());
-                setClickCell();
-            } else if (board.getPlayerTurn() == 2) {
-                binding.turn.setText(new StringBuilder().append("Lượt ").append(player2.getPlayerName()).toString());
 
-                if (isBotPlay) {
-                    setClickedButtn(false);
-                    botLogic.botMove();
-                    if (botLogic.botTurn) {
-                        new Handler().postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                App.getInstance().getMediaManager().playSound(App.getInstance().getMediaManager().O_SOUND);
-                                performAction(checkViewClick(botLogic.cellPos), botLogic.cellPos);
-                                setClickedButtn(true);
-                            }
-                        }, 700);
+            //if player2's turn
+        } else if (viewModel.getPlayerTurn() == 2) {
+            viewModel.updateLiveText(new StringBuilder().append("Lượt ").append(viewModel.getPlayer2().getPlayerName()).toString());
 
+            if (viewModel.isBotPlay()) {
+                setClickedButtn(false);
+                //   botLogic.botMove();
+                viewModel.getBotLogic().findBestMove();
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        App.getInstance().getMediaManager().playSound(App.getInstance().getMediaManager().O_SOUND);
+                        performAction(checkViewClick(viewModel.getBotLogic().cellPos), viewModel.getBotLogic().cellPos);
+                        setClickedButtn(true);
                     }
-
-                } else {
-                    setClickCell();
-                }
+                }, 700);
 
 
+            } else {
+                setClickCell();
             }
+
+
         }
     }
+
 
     private ImageView checkViewClick(int cellPos) {
 
@@ -124,63 +132,79 @@ public class PlayFrg extends BaseFragment<FragmentPlayBinding, CommonVM> {
 
 
     private void updateScore() {
-        binding.player1Score.setText(new StringBuilder().append(player1.getScore()).append("").toString());
-        binding.player2Score.setText(new StringBuilder().append(player2.getScore()).append("").toString());
+
+
+        viewModel.getPlayer1LiveScore().observe(this, new Observer<Integer>() {
+            @Override
+            public void onChanged(Integer integer) {
+                binding.player1Score.setText(integer + "");
+            }
+        });
+
+
+        viewModel.getPlayer2LiveScore().observe(this, new Observer<Integer>() {
+            @Override
+            public void onChanged(Integer integer) {
+                binding.player2Score.setText(integer + "");
+            }
+        });
+
+
     }
 
     private void setClickCell() {
         c0.setOnClickListener(view -> {
-            if (board.isCellSelected(0)) {
+            if (viewModel.isCellSelected(0)) {
                 playClickSound();
                 performAction((ImageView) view, 0);
             }
         });
 
         c1.setOnClickListener(view -> {
-            if (board.isCellSelected(1)) {
+            if (viewModel.isCellSelected(1)) {
                 playClickSound();
                 performAction((ImageView) view, 1);
             }
 
         });
         c2.setOnClickListener(view -> {
-            if (board.isCellSelected(2)) {
+            if (viewModel.isCellSelected(2)) {
                 playClickSound();
                 performAction((ImageView) view, 2);
             }
         });
         c3.setOnClickListener(view -> {
-            if (board.isCellSelected(3)) {
+            if (viewModel.isCellSelected(3)) {
                 playClickSound();
                 performAction((ImageView) view, 3);
             }
         });
         c4.setOnClickListener(view -> {
-            if (board.isCellSelected(4)) {
+            if (viewModel.isCellSelected(4)) {
                 playClickSound();
                 performAction((ImageView) view, 4);
             }
         });
         c5.setOnClickListener(view -> {
-            if (board.isCellSelected(5)) {
+            if (viewModel.isCellSelected(5)) {
                 playClickSound();
                 performAction((ImageView) view, 5);
             }
         });
         c6.setOnClickListener(view -> {
-            if (board.isCellSelected(6)) {
+            if (viewModel.isCellSelected(6)) {
                 playClickSound();
                 performAction((ImageView) view, 6);
             }
         });
         c7.setOnClickListener(view -> {
-            if (board.isCellSelected(7)) {
+            if (viewModel.isCellSelected(7)) {
                 playClickSound();
                 performAction((ImageView) view, 7);
             }
         });
         c8.setOnClickListener(view -> {
-            if (board.isCellSelected(8)) {
+            if (viewModel.isCellSelected(8)) {
                 playClickSound();
                 performAction((ImageView) view, 8);
             }
@@ -214,41 +238,44 @@ public class PlayFrg extends BaseFragment<FragmentPlayBinding, CommonVM> {
 
     private void performAction(ImageView imageView, int selectedCellPos) {
 
-        board.updateCellPosition(selectedCellPos);
+        viewModel.updateCellPosition(selectedCellPos, viewModel.getPlayerTurn());
 
-        if (isBotPlay) {
-            botLogic.setCellPositionList(board.getCellPosArray());
+        if (viewModel.isBotPlay()) {
+            viewModel.getBotLogic().updateCellPosition(selectedCellPos, viewModel.getPlayerTurn());
         }
 
 
-        if (board.getPlayerTurn() == 1) {
-            imageView.setImageResource(player1.getChessImage());
-            board.totalSelectedBoxes++;
+        if (viewModel.getPlayerTurn() == 1) {
 
-            if (board.checkWin(board.getPlayerTurn())) {
-                handleWin(board.getPlayerTurn());
+            imageView.setImageResource(viewModel.getPlayer1().getChessImage());
+            viewModel.totalSelectedBoxes++;
+            viewModel.getBotLogic().totalSelectedBoxes++;
 
-            } else if (board.totalSelectedBoxes == 9) {
+            if (viewModel.checkWin(viewModel.getPlayerTurn())) {
+                handleWin(viewModel.getPlayerTurn());
+
+            } else if (viewModel.totalSelectedBoxes == 9) {
                 handleDraw();
 
             } else {
 
-                board.setPlayerTurn(2);
+                viewModel.setPlayerTurn(2);
                 playGame();
 
             }
         } else {
-            imageView.setImageResource(player2.getChessImage());
-            board.totalSelectedBoxes++;
-            if (board.checkWin(board.getPlayerTurn())) {
-                handleWin(board.getPlayerTurn());
+            imageView.setImageResource(viewModel.getPlayer2().getChessImage());
+            viewModel.totalSelectedBoxes++;
+            viewModel.getBotLogic().totalSelectedBoxes++;
+            if (viewModel.checkWin(viewModel.getPlayerTurn())) {
+                handleWin(viewModel.getPlayerTurn());
 
-            } else if (board.totalSelectedBoxes == 9) {
+            } else if (viewModel.totalSelectedBoxes == 9) {
                 handleDraw();
 
             } else {
 
-                board.setPlayerTurn(1);
+                viewModel.setPlayerTurn(1);
 
                 playGame();
 
@@ -258,16 +285,14 @@ public class PlayFrg extends BaseFragment<FragmentPlayBinding, CommonVM> {
     }
 
     private void handleWin(int playerTurn) {
-        showStrokeLine(board.getWinType());
+        showStrokeLine(viewModel.getWinType());
         if (playerTurn == 1) {
-            binding.turn.setText(new StringBuilder().append(player1.getPlayerName()).append(" thắng!!!").toString());
-            player1.setScore(player1.getScore() + 1);
-            binding.player1Score.setText(new StringBuilder().append(player1.getScore()).append("").toString());
+            viewModel.updatePlayerScore(viewModel.getPlayer1().getScore(), viewModel.getPlayer1LiveScore());
+            viewModel.updateLiveText(viewModel.getPlayer1().getPlayerName() + " thắng");
 
         } else {
-            binding.turn.setText(new StringBuilder().append(player2.getPlayerName()).append(" thắng!!!").toString());
-            player2.setScore(player2.getScore() + 1);
-            binding.player2Score.setText(new StringBuilder().append(player2.getScore()).append("").toString());
+            viewModel.updatePlayerScore(viewModel.getPlayer2().getScore(), viewModel.getPlayer2LiveScore());
+            viewModel.updateLiveText(viewModel.getPlayer2().getPlayerName() + " thắng");
         }
         startAnimation(binding.turn);
         setClickedButtn(false);
@@ -276,7 +301,7 @@ public class PlayFrg extends BaseFragment<FragmentPlayBinding, CommonVM> {
 
 
     private void handleDraw() {
-        binding.turn.setText("Hòa!!!");
+      viewModel.updateLiveText("Hòa!!!!");
         startAnimation(binding.turn);
         setClickedButtn(false);
         setVisibleMenuBttn(true);
@@ -323,10 +348,10 @@ public class PlayFrg extends BaseFragment<FragmentPlayBinding, CommonVM> {
 
 
     private void resetGame() {
-        board.resetBoard();
+        viewModel.resetBoard();
 
-        if (isBotPlay) {
-            botLogic.reset();
+        if (viewModel.isBotPlay()) {
+            viewModel.getBotLogic().reset();
         }
 
         for (ImageView ob : cellBttn
@@ -365,8 +390,8 @@ public class PlayFrg extends BaseFragment<FragmentPlayBinding, CommonVM> {
     }
 
     @Override
-    protected Class<CommonVM> getClassVM() {
-        return CommonVM.class;
+    protected Class<MainVM> getClassVM() {
+        return MainVM.class;
     }
 
     private void playAgain() {
@@ -384,47 +409,5 @@ public class PlayFrg extends BaseFragment<FragmentPlayBinding, CommonVM> {
 
     }
 
-    private void initPlayer() {
-        int image1 = 0, image2 = 0;
-        if (App.getInstance().getStorage().chessType.equals("Cổ điển")) {
-            image1 = R.drawable.classicx;
-            image2 =R.drawable.classico;
-        }else if (App.getInstance().getStorage().chessType.equals("Hiện đại")){
-            image1 = R.drawable.modern_x;
-            image2 =R.drawable.modern_o;
-        }else if (App.getInstance().getStorage().chessType.equals("Cách điệu")){
-            image1 = R.drawable.newx;
-            image2 =R.drawable.newo;
-        }else if (App.getInstance().getStorage().chessType.equals("Hoạt hình")){
-            image1 = R.drawable.cartoonx;
-            image2 =R.drawable.cartoono;
-        }else if (App.getInstance().getStorage().chessType.equals("Vũ trụ")){
-            image1 = R.drawable.starx;
-            image2 =R.drawable.moono;
-        }else if (App.getInstance().getStorage().chessType.equals("Tự nhiên")){
-            image1 = R.drawable.naturex;
-            image2 =R.drawable.natureo;
-        }
-        board = new Board();
-        board.updateWintypeList();
-
-        botLogic = new BotLogic();
-        botLogic.setCellPositionList(board.cellPosArray);
-
-
-        if (App.getInstance().getStorage().playWithBot) {
-            player1 = new Player("Bạn", image1, 0, "x");
-            player2 = new Player("Máy",image2, 0, "o");
-            isBotPlay = true;
-        } else {
-            player1 = new Player(App.getInstance().getStorage().playerName1,image1, 0, "x");
-            player2 = new Player(App.getInstance().getStorage().playerName2, image2, 0, "o");
-        }
-
-        binding.player1Name.setText(player1.getPlayerName());
-        binding.player2Name.setText(player2.getPlayerName());
-
-        updateScore();
-    }
 
 }
