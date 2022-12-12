@@ -1,6 +1,7 @@
 package com.example.tiktaktoe.fragment;
 
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
@@ -44,7 +45,6 @@ public class PlayFrg extends BaseFragment<FragmentPlayBinding, MainVM> {
         binding.player2Name.setText(viewModel.getPlayer2().getPlayerName());
 
         updateScore();
-
         updateTurn();
         initBoardCell();
         viewModel.updateLiveText(viewModel.getPlayerTurn() == 1 ? viewModel.getPlayer1().getPlayerName() + " đi trước" : viewModel.getPlayer2().getPlayerName() + " đi trước");
@@ -52,9 +52,9 @@ public class PlayFrg extends BaseFragment<FragmentPlayBinding, MainVM> {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                playGame();
+                playGame(viewModel.getPlayerTurn());
             }
-        },1000);
+        }, 700);
 
     }
 
@@ -76,40 +76,51 @@ public class PlayFrg extends BaseFragment<FragmentPlayBinding, MainVM> {
 
     }
 
-    private void playGame() {
+    private void playGame(int playerTurn) {
         //check who's turn
         //if  is not first game
         //if player1's turn
+        setClickedButtn(false);
+        if (viewModel.checkWin(viewModel.getPlayerTurn())) {
+            handleWin(viewModel.getPlayerTurn());
 
+        } else if (viewModel.totalSelectedBoxes == 9) {
+            handleDraw();
 
+        } else {
 
-        if (viewModel.getPlayerTurn() == 1) {
-            viewModel.updateLiveText("Lượt " + viewModel.getPlayer1().getPlayerName());
-            setClickCell();
+            viewModel.setPlayerTurn(playerTurn);
 
-            //if player2's turn
-        } else if (viewModel.getPlayerTurn() == 2) {
-            viewModel.updateLiveText("Lượt " + viewModel.getPlayer2().getPlayerName());
+            if (playerTurn == 1) {
+                setClickedButtn(true);
+                viewModel.updateLiveText("Lượt " + viewModel.getPlayer1().getPlayerName());
 
-            if (viewModel.isBotPlay()) {
-                setClickedButtn(false);
-                //   botLogic.botMove();
-                viewModel.getBotLogic().findBestMove();
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        App.getInstance().getMediaManager().playSound(App.getInstance().getMediaManager().O_SOUND);
-                        performAction(checkViewClick(viewModel.getBotLogic().cellPos), viewModel.getBotLogic().cellPos);
-                        setClickedButtn(true);
-                    }
-                }, 700);
-
-
-            } else {
                 setClickCell();
+
+                //if player2's turn
+            } else if (playerTurn == 2) {
+                viewModel.updateLiveText("Lượt " + viewModel.getPlayer2().getPlayerName());
+
+                if (viewModel.isBotPlay()) {
+                    setClickedButtn(false);
+                    //   botLogic.botMove();
+                    int pos = viewModel.doBotTurn();
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            App.getInstance().getMediaManager().playSound(App.getInstance().getMediaManager().O_SOUND);
+                            performAction(checkViewClick(pos), pos);
+                        }
+                    }, 700);
+
+
+                } else {
+                    setClickedButtn(true);
+                    setClickCell();
+                }
+
+
             }
-
-
         }
     }
 
@@ -134,8 +145,9 @@ public class PlayFrg extends BaseFragment<FragmentPlayBinding, MainVM> {
             return c7;
         } else if (cellPos == 8) {
             return c8;
+        } else {
+            return null;
         }
-        return null;
     }
 
 
@@ -245,51 +257,18 @@ public class PlayFrg extends BaseFragment<FragmentPlayBinding, MainVM> {
 
 
     private void performAction(ImageView imageView, int selectedCellPos) {
-
+        Log.e("ddddddd", "performAction: clickin" + selectedCellPos);
+        setClickedButtn(false);
         viewModel.updateCellPosition(selectedCellPos, viewModel.getPlayerTurn());
-
-        if (viewModel.isBotPlay()) {
-            viewModel.getBotLogic().updateCellPosition(selectedCellPos, viewModel.getPlayerTurn());
-        }
-
+        viewModel.updateTotalSelectedBox();
 
         if (viewModel.getPlayerTurn() == 1) {
-
             imageView.setImageResource(viewModel.getPlayer1().getChessImage());
-            viewModel.totalSelectedBoxes++;
-            viewModel.getBotLogic().totalSelectedBoxes++;
-
-            if (viewModel.checkWin(viewModel.getPlayerTurn())) {
-                handleWin(viewModel.getPlayerTurn());
-
-            } else if (viewModel.totalSelectedBoxes == 9) {
-                handleDraw();
-
-            } else {
-
-                viewModel.setPlayerTurn(2);
-                playGame();
-
-            }
+            playGame(2);
         } else {
             imageView.setImageResource(viewModel.getPlayer2().getChessImage());
-            viewModel.totalSelectedBoxes++;
-            viewModel.getBotLogic().totalSelectedBoxes++;
-            if (viewModel.checkWin(viewModel.getPlayerTurn())) {
-                handleWin(viewModel.getPlayerTurn());
-
-            } else if (viewModel.totalSelectedBoxes == 9) {
-                handleDraw();
-
-            } else {
-
-                viewModel.setPlayerTurn(1);
-
-                playGame();
-
-            }
+            playGame(1);
         }
-
     }
 
     private void handleWin(int playerTurn) {
@@ -303,7 +282,6 @@ public class PlayFrg extends BaseFragment<FragmentPlayBinding, MainVM> {
             viewModel.updateLiveText(viewModel.getPlayer2().getPlayerName() + " thắng");
         }
         startAnimation(binding.turn);
-        setClickedButtn(false);
         setVisibleMenuBttn(true);
     }
 
@@ -311,7 +289,6 @@ public class PlayFrg extends BaseFragment<FragmentPlayBinding, MainVM> {
     private void handleDraw() {
         viewModel.updateLiveText("Hòa!!!!");
         startAnimation(binding.turn);
-        setClickedButtn(false);
         setVisibleMenuBttn(true);
     }
 
@@ -358,9 +335,9 @@ public class PlayFrg extends BaseFragment<FragmentPlayBinding, MainVM> {
     private void resetGame() {
         viewModel.resetBoard();
 
-        if (viewModel.isBotPlay()) {
-            viewModel.getBotLogic().reset();
-        }
+//        if (viewModel.isBotPlay()) {
+//            viewModel.getBotLogic().reset();
+//        }
 
         for (ImageView ob : cellBttn
         ) {
@@ -376,11 +353,9 @@ public class PlayFrg extends BaseFragment<FragmentPlayBinding, MainVM> {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                playGame();
+                playGame(viewModel.getPlayerTurn());
             }
-        },1000);
-
-
+        }, 1000);
     }
 
 

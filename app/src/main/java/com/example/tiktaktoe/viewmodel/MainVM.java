@@ -119,7 +119,7 @@ public class MainVM extends ViewModel {
         botLogic = new DifficultBot();
 
         botLogic.updateWintypeList();
-        botLogic.setCellPositionArr(cellPosArray);
+        //   botLogic.setCellPositionArr(cellPosArray);
 
 
         if (App.getInstance().getStorage().playWithBot) {
@@ -132,15 +132,16 @@ public class MainVM extends ViewModel {
         }
 
     }
-    public void randomFirtPlayer(){
 
-     playerTurn = new Random().nextInt(2)+1;
+    public void randomFirtPlayer() {
+
+        playerTurn = new Random().nextInt(2) + 1;
 
     }
 
     public boolean isCellSelected(int cellPos) {
         return this.cellPosArray[cellPos] == 0;
-
+//&& botLogic.getCellPositionArr()[cellPos] == 0
     }
 
     public void updateCellPosition(int selectedCellPos, int playerTurn) {
@@ -184,34 +185,45 @@ public class MainVM extends ViewModel {
     public void resetBoard() {
         cellPosArray = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0};
 
-
         if (firstPlayer == 1) {
             firstPlayer = 2;
-            playerTurn =2;
+            playerTurn = 2;
             botLogic.setGoFirst(true);
 
-        } else if(firstPlayer == 2){
+        } else if (firstPlayer == 2) {
 
             firstPlayer = 1;
             playerTurn = 1;
             botLogic.setGoFirst(false);
         }
         totalSelectedBoxes = 0;
-
+        botLogic.totalSelectedBoxes = 0;
     }
 
 
     public void updatePlayerScore(Player player) {
 
-        if (player ==player1){
-            player1.setScore(player1.getScore()+1);
+        if (player == player1) {
+            player1.setScore(player1.getScore() + 1);
             player1LiveScore.postValue(player1.getScore());
-        }
-
-     else if (player ==player2){
-            player2.setScore(player2.getScore()+1);
+        } else if (player == player2) {
+            player2.setScore(player2.getScore() + 1);
             player2LiveScore.postValue(player2.getScore());
         }
+
+    }
+
+    public int doBotTurn() {
+        return botLogic.findBestMove(cellPosArray);
+    }
+
+    public void updateTotalSelectedBox() {
+        totalSelectedBoxes++;
+
+        if (isBotPlay) {
+            getBotLogic().totalSelectedBoxes++;
+        }
+
 
     }
 }

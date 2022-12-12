@@ -12,12 +12,14 @@ public class DifficultBot {
 
 
     private static final int INFINITY = Integer.MAX_VALUE;
-    private int[] cellPositionArr = {0, 0, 0, 0, 0, 0, 0, 0, 0};
+    //   private int[] cellPositionArr = {0, 0, 0, 0, 0, 0, 0, 0, 0};
     private boolean isGoFirst;
-    public int cellPos;
     private final List<int[]> winTypeList = new ArrayList<>();
     public int totalSelectedBoxes = 0;
 
+//    public int[] getCellPositionArr() {
+//        return cellPositionArr;
+//    }
 
     public void setGoFirst(boolean goFirst) {
         isGoFirst = goFirst;
@@ -36,15 +38,17 @@ public class DifficultBot {
     }
 
 
-    public void findBestMove() {
+    public int findBestMove(int[] cellPositionArr) {
 
         if (isGoFirst) {
 
-            cellPos = new Random().nextInt(9);
+
             setGoFirst(false);
-            return;
+            int bestMove = new Random().nextInt(9);
+            Log.e("ddddddd", "\nbestmove: " + bestMove);
+            return bestMove;
         }
-        if (checkSecondTurn()) {
+        if (checkSecondTurn(cellPositionArr)) {
             List<Integer> newList = new ArrayList<>();
             for (int i = 0; i < cellPositionArr.length; i++
             ) {
@@ -55,8 +59,9 @@ public class DifficultBot {
 
             Collections.shuffle(newList);
 
-            cellPos = newList.get(0);
-            return;
+            int bestMove = newList.get(0);
+            Log.e("ddddddd", "\nbestmove: " + bestMove);
+            return bestMove;
         }
         int bestMove = 0;
         int bestScore = -INFINITY;
@@ -64,11 +69,12 @@ public class DifficultBot {
 
             if (cellPositionArr[i] == 0) {
                 cellPositionArr[i] = 2;
-                Log.e("ddddddd", "findBestMove: " + i);
+                //   Log.e("ddddddd", "findBestMove: " + i);
 
                 int score = minimax(cellPositionArr, 0, false);
 
                 cellPositionArr[i] = 0;
+
                 if (score > bestScore) {
                     bestScore = score;
                     bestMove = i;
@@ -76,12 +82,11 @@ public class DifficultBot {
             }
 
         }
-        cellPos = bestMove;
         Log.e("ddddddd", "\nbestmove: " + bestMove);
-
+        return bestMove;
     }
 
-    private boolean checkSecondTurn() {
+    private boolean checkSecondTurn(int[] cellPositionArr) {
         int count = 0;
         for (int j : cellPositionArr) {
             if (j != 0) {
@@ -99,7 +104,7 @@ public class DifficultBot {
             return 10;
         }
 
-        if (checkLose(arr)) {
+        if (!checkWin(arr)) {
             return -10;
         }
         if (checkDraw(arr)) {
@@ -138,9 +143,9 @@ public class DifficultBot {
 
     }
 
-    public void updateCellPosition(int selectedCellPos, int playerTurn) {
-        cellPositionArr[selectedCellPos] = playerTurn;
-    }
+//    public void updateCellPosition(int selectedCellPos, int playerTurn) {
+//        cellPositionArr[selectedCellPos] = playerTurn;
+//    }
 
     private boolean checkDraw(int[] arr) {
         int count = 0;
@@ -162,6 +167,9 @@ public class DifficultBot {
 
                 result = true;
 
+            } else if (arr[winType[0]] == 1 && arr[winType[1]] == 1 && arr[winType[2]] == 1) {
+
+                result = false;
             }
 
         }
@@ -169,28 +177,15 @@ public class DifficultBot {
 
     }
 
-    private boolean checkLose(int[] arr) {
-        boolean result = false;
-        for (int i = 0; i < winTypeList.size(); i++) {
-            final int[] winType = winTypeList.get(i);//012  345 678 ...
-            if (arr[winType[0]] == 1 && arr[winType[1]] == 1 && arr[winType[2]] == 1) {
 
-                result = true;
-            }
-
-        }
-        return result;
-
-    }
-
-    public void reset() {
-        cellPositionArr = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0};
-        cellPos = 0;
-    }
-
-    public void setCellPositionArr(int[] cellPositionArr) {
-        this.cellPositionArr = cellPositionArr;
-    }
+//    public void reset() {
+//        cellPositionArr = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0};
+//        cellPos = 0;
+//    }
+//
+//    public void setCellPositionArr(int[] cellPositionArr) {
+//        this.cellPositionArr = cellPositionArr;
+//    }
 
 
 }
