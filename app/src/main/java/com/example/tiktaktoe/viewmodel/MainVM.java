@@ -24,7 +24,7 @@ public class MainVM extends ViewModel {
     private MutableLiveData<String> turnLiveTxt = new MutableLiveData<>();
 
 
-    private final List<int[]> winTypeList = new ArrayList<>(); //{012 345...}
+    private  List<int[]> winTypeList = new ArrayList<>(); //{012 345...}
 
     public int[] cellPosArray = {0, 0, 0, 0, 0, 0, 0, 0, 0}; // an array of cell's  position
     public int totalSelectedBoxes = 0; //to check draw
@@ -149,17 +149,16 @@ public class MainVM extends ViewModel {
     }
 
     public boolean checkWin(int playerTurn) {
-        boolean result = false;
-        for (int i = 0; i < winTypeList.size(); i++) {
-            final int[] winType = winTypeList.get(i);//012  345 678 ...
-            if (cellPosArray[winType[0]] == playerTurn && cellPosArray[winType[1]] == playerTurn && cellPosArray[winType[2]] == playerTurn) {
 
-                result = true;
+        for (int i = 0; i < winTypeList.size(); i++) {
+             int[] winType = winTypeList.get(i);//012  345 678 ...
+            if (cellPosArray[winType[0]] == playerTurn && cellPosArray[winType[1]] == playerTurn && cellPosArray[winType[2]] == playerTurn) {
                 this.winType = winType;
+               return true;
             }
 
         }
-        return result;
+        return false;
     }
 
     public void updateLiveText(String txt) {
@@ -188,13 +187,9 @@ public class MainVM extends ViewModel {
         if (firstPlayer == 1) {
             firstPlayer = 2;
             playerTurn = 2;
-            botLogic.setGoFirst(true);
-
         } else if (firstPlayer == 2) {
-
             firstPlayer = 1;
             playerTurn = 1;
-            botLogic.setGoFirst(false);
         }
         totalSelectedBoxes = 0;
         botLogic.totalSelectedBoxes = 0;
